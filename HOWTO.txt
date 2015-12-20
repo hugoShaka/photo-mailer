@@ -1,0 +1,39 @@
+=====================================
+HOWTO
+=====================================
+
+
+---------------
+Warning
+---------------
+All the files must remain together if you want the script to work.
+
+---------------
+Making it work
+---------------
+Put the e-mail address into the photo title on Ligntroom
+Export everything in one foler (with the metadatas)
+Enter the path into os.walk() (the scanfolder function)
+Run the script
+
+
+
+=====================================
+Consignes
+=====================================
+
+
+-----------------
+Pr?cautions :
+-----------------
+Toujours laisser le dossier entier
+
+
+-----------------
+Fonctionnement
+-----------------
+Indiquer le mail dans le titre de la photo sur lightroom
+Tout exporter dans un m?me dossier
+Entrer le chemin du dossier dans le champ os.walk() de la fonction scanfolder
+Lancer le script
+
