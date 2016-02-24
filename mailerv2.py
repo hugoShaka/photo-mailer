@@ -20,9 +20,9 @@ class photo:
     else:
       self.email=mail
     self.sent=False
-  def send(mailaccount):
-    mail=mail(self.email,self.location,mailaccount)
-
+  def send(mailaccount,message):
+    self.MIMEmail=mail(self.email,self.location,mailaccount,message)
+    self.MIMEmail.send()
 
 class folder:
   """Repr√sente un dossier"""
@@ -71,7 +71,7 @@ class mailaccount:
 
 class mail:
   """Objet mail qui poss√®de les methodes pour etre envoye, recupere ses parametres d'un objet mailaccount"""
-  def __init__(self,reciever,photo,mailaccount):
+  def __init__(self,reciever,photo,mailaccount,message):
     self.msg=MIMEMultipart()
     self.msg['From'] = mailaccount.sender
     self.msg['To'] = reciever
@@ -81,12 +81,18 @@ class mail:
     pj=open(photo, 'rb')
     self.msg.attach(MIMEApplication(pj.read(),Content_Disposition='attachement;filename="%s"' % os.path.basename(photo),Name=os.path.basename(photo)))
     pj.close()
+
   def send():
+    """Send the mail object"""
     if (mailaccount.connected):
+      mailaccount.mailserver.sendmail(mailaccount.sender, self.msg['To'], self.msg.as_string())
+    else :
+      mailaccount.log()
+      mailaccount.mailserver.sendmail(mailaccount.sender, self.msg['To'], self.msg.as_string())
       
 class message:
-
-  def __init__(self,text='Instert texte here'):
+    """A class to manage the e-mail text"""
+  def __init__(self,text='No text'):
     self.text=text
     self.sign=''
   def create():
