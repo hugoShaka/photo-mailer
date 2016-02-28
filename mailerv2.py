@@ -10,22 +10,24 @@ from email.mime.application import MIMEApplication
 from lib.iptcinfo import IPTCInfo
 
 class photo:
-  """Une photo est une entit√"""
-  def __init__(self,fileloc):
+  """A photo can be sent, it also contains the recipient's email address"""
+  def __init__(self,fileloc,mailaccount,message):
     self.location=fileloc
-    info=IPTCInfo(path_to_image)
-    mail=str(info.data['object name'])
-    if mail=='':
+    self.info=IPTCInfo(path_to_image)
+    self.addr=str(self.info.data['object name'])
+    if self.addr=='':
       self.email=None
     else:
-      self.email=mail
+      self.email=mail(self.addr,self.location,mailaccount,message)
     self.sent=False
-  def send(mailaccount,message):
-    self.MIMEmail=mail(self.email,self.location,mailaccount,message)
-    self.MIMEmail.send()
+  def send()
+    if self.sent:
+      print('Warning :Re-sending the email')
+    self.email.send()
+    self.sent=True
 
 class folder:
-  """Repr√sente un dossier"""
+  """Repr√©sente un dossier"""
   def __init__(self,pathtofolder):
     self.path=pathtofolder
     self.files=[]
@@ -34,7 +36,7 @@ class folder:
     for root, dirs, files in os.walk(self.path):
       for file in files:
         if file.endswith(".jpg"):
-          self.files.append(Photo(os.path.join(root, file)))
+          self.files.append(photo(os.path.join(root, file)))
           howmanyimport+=1
     print(howmanyimport + "files were sucessfully imported")
 
@@ -52,6 +54,18 @@ class mailaccount:
   def credentials():
     self.login=input("Login")
     self.pwd=getpass.getpass("Mot de passe")
+
+  def showMailSettings():
+    print("sender : "+self.sender+"\nsmtp server : "+self.smtp+"\nport : "+self.port+"\nlogin : ")
+    if not self.connected:
+      print("Not connected")
+    else:
+      print("Connected as : "+self.login)
+
+  def editMailSettings():
+    self.sender=input("sender ?")
+    self.smtp=input("server ?")
+    self.port=input("port?")
 
   def log():
     try:
@@ -100,3 +114,19 @@ class message:
 
 def main():
   print("Not yet")
+  mailacc=mailaccount()
+  mailacc.showMailSettings()
+  if (input("Edit mail server settings ? (y/N)")=='y')
+    mailacc.edit():
+  print("Please enter your credentials")
+  mailacc.credentials()
+  print("Testing the settings")
+  mailacc.log()
+  if mailacc.conncted
+    print("Successfully logged :) ")
+  else:
+    print("Exiting")
+    break
+  pathto=input("Choose yout folder")
+  location=folder(pathto)
+  
