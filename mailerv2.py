@@ -32,10 +32,10 @@ class photo:
       self.email=mail(self.addr,self.location,mailaccount,message)
     self.sent=False
 
-  def send(self):
+  def send(self,mailacc):
     if self.sent:
       print('Warning :Re-sending the email')
-    self.email.send()
+    self.email.send(mailacc)
     self.sent=True
 
 class folder:
@@ -56,6 +56,10 @@ class folder:
   def generateEmails(self,mailaccount,message):
     for pic in self.files:
       pic.generateEmail(mailaccount,message)
+  def send(self,mailacc):
+    for pic in self.files:
+      pic.send(mailacc)
+      print('Mail sent')
 
 
 
@@ -64,7 +68,7 @@ class mailaccount:
 """
 
   def __init__(self):
-    self.sender="Club Photo"
+    self.sender="hugo.hervieux@larez.fr"
     self.port="587"
     self.smtp="smtp.rez-gif.supelec.fr"
     self.login="None"
@@ -103,11 +107,20 @@ class mailaccount:
     self.mailserver.quit()
     self.connected=False
 
+  def save(self):
+    data=open("./saves/ms.cf")
+    data.close()
+
+  def load(self):
+    data=open("./saves/ms.cf")
+    data.close()
+
 class mail:
   """Objet mail qui possède les methodes pour etre envoye, recupere ses parametres d'un objet mailaccount"""
   def __init__(self,reciever,photo,mailaccount,message):
     if reciever==None:
       print("\n /!\ Email not created due to invalid email address")
+      self.sent=False
     else:
       self.msg=MIMEMultipart()
       self.msg['From'] = mailaccount.sender
@@ -120,14 +133,14 @@ class mail:
       pj.close()
       print("Mail to : "+reciever+" successfully generated")
 
-  def send(self):
+  def send(self,mailacc):
     """Send the mail object"""
-    if (mailaccount.connected):
-      mailaccount.mailserver.sendmail(mailaccount.sender, self.msg['To'], self.msg.as_string())
+    if (mailacc.connected):
+      mailacc.mailserver.sendmail(mailacc.sender, self.msg['To'], self.msg.as_string())
     else :
-      mailaccount.log()
-      mailaccount.mailserver.sendmail(mailaccount.sender, self.msg['To'], self.msg.as_string())
-      
+      mailacc.log()
+      mailacc.mailserver.sendmail(mailacc.sender, self.msg['To'], self.msg.as_string())
+
 class message:
   """A class to manage the e-mail text"""
   def __init__(self,text='No text'):
@@ -152,10 +165,18 @@ def main():
   else:
     print("Exiting")
   pathto=raw_input("Choose your folder")
-  currentFolder=folder('/home/shaka/Downloads/photos/')
+  currentFolder=folder('./')
   currentFolder.scan()
   currentMessage=message()
   currentMessage.text=raw_input("enter the email's body text")
   currentFolder.generateEmails(mailacc,currentMessage)
+  
+  print("========== Mails generated ==========")
+  if(raw_input("Send e-mails ? (y/n)")=='y'):
+    currentFolder.send(mailacc)
+    
+
+
+
 
 main()
